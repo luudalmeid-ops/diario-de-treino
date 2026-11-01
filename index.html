@@ -155,26 +155,27 @@ var IC = {
 function warm(id){return {id:id+'-aq',name:'Aquecimento',type:'check',sets:1,label:'3 a 5 minutos'};}
 var W=[
  {id:1,ex:[warm('t1'),
-  {id:'t1-crunch',name:'Abdominal crunch na máquina',type:'load',sets:3,reps:15,inc:5},
+  {id:'t1-crunch',name:'Abdominal crunch na máquina',type:'load',sets:3,reps:15,inc:2.5},
   {id:'t1-smith',name:'Agachamento no smith',type:'load',sets:3,reps:12,inc:5},
-  {id:'t1-pux',name:'Puxada frontal aberta',type:'load',sets:3,reps:12,inc:5},
-  {id:'t1-supino',name:'Supino reto com halteres',type:'load',sets:3,reps:12,inc:2},
-  {id:'t1-rosca',name:'Rosca direta com barra',type:'load',sets:3,reps:12,inc:2},
-  {id:'t1-triceps',name:'Tríceps corda no pulley',type:'load',sets:3,reps:12,inc:5}]},
+  {id:'t1-pux',name:'Puxada frontal aberta',type:'load',sets:3,reps:12,inc:2.5},
+  {id:'t1-supino',name:'Supino reto com halteres',type:'load',sets:3,reps:12,inc:1},
+  {id:'t1-rosca',name:'Rosca direta com barra',type:'load',sets:3,reps:12,inc:1},
+  {id:'t1-triceps',name:'Tríceps corda no pulley',type:'load',sets:3,reps:12,inc:2.5}]},
  {id:2,ex:[warm('t2'),
   {id:'t2-prancha',name:'Prancha abdominal',type:'time',sets:3,secs:30},
-  {id:'t2-leg',name:'Leg press',type:'load',sets:3,reps:12,inc:10},
-  {id:'t2-pant',name:'Panturrilha no leg press',type:'load',sets:3,reps:15,inc:5},
-  {id:'t2-remada',name:'Remada baixa com triângulo',type:'load',sets:3,reps:12,inc:5},
-  {id:'t2-inclinado',name:'Supino inclinado na máquina',type:'load',sets:3,reps:12,inc:5},
+  {id:'t2-leg',name:'Leg press',type:'load',sets:3,reps:12,inc:5},
+  {id:'t2-pelvica',name:'Elevação pélvica',type:'load',sets:3,reps:12,inc:5},
+  {id:'t2-remada',name:'Remada baixa com triângulo',type:'load',sets:3,reps:12,inc:2.5},
+  {id:'t2-inclinado',name:'Supino inclinado na máquina',type:'load',sets:3,reps:12,inc:2.5},
   {id:'t2-lateral',name:'Elevação lateral com halteres',type:'load',sets:3,reps:12,inc:1}]},
  {id:3,ex:[warm('t3'),
   {id:'t3-abd',name:'Abdominal deitado com perna estendida',type:'bw',sets:3},
-  {id:'t3-unil',name:'Agachamento unilateral com halter',type:'load',sets:3,reps:12,inc:2},
-  {id:'t3-puxf',name:'Puxada frontal fechada',type:'load',sets:3,reps:12,inc:5},
-  {id:'t3-cruc',name:'Crucifixo na máquina',type:'load',sets:3,reps:12,inc:5},
-  {id:'t3-desen',name:'Desenvolvimento na máquina',type:'load',sets:3,reps:12,inc:5},
-  {id:'t3-testa',name:'Tríceps testa com halter',type:'load',sets:3,reps:12,inc:2}]}
+  {id:'t3-unil',name:'Agachamento unilateral com halter',type:'load',sets:3,reps:12,inc:1},
+  {id:'t3-stiff',name:'Stiff com halteres',type:'load',sets:3,reps:12,inc:1},
+  {id:'t3-puxf',name:'Puxada frontal fechada',type:'load',sets:3,reps:12,inc:2.5},
+  {id:'t3-cruc',name:'Crucifixo na máquina',type:'load',sets:3,reps:12,inc:2.5},
+  {id:'t3-desen',name:'Desenvolvimento na máquina',type:'load',sets:3,reps:12,inc:2.5},
+  {id:'t3-testa',name:'Tríceps testa com halter',type:'load',sets:3,reps:12,inc:1}]}
 ];
 /* Treino 1 = leg press, Treino 2 = agachamento no smith, Treino 3 = agachamento unilateral */
 W=[W[1],W[0],W[2]];
@@ -207,6 +208,8 @@ function adopt(o){
 
 /* ---------- Progressão ---------- */
 function num(v){var n=parseFloat(String(v).replace(',','.'));return isFinite(n)?n:null}
+/* Aumento de cerca de 5%, arredondado para o menor salto do aparelho (inc) */
+function bump(kg,step){var b=Math.round(kg*0.05/step)*step;return Math.max(step,b);}
 function lastFor(id){
   for(var i=S.sessions.length-1;i>=0;i--){var e=S.sessions[i].ex[id];if(e&&e.length)return e}
   return null;
@@ -220,7 +223,8 @@ function target(ex){
     var kg=Math.max.apply(null,last.map(function(s){return s.kg||0}));
     if(ex.light)return {val:kg,up:false,last:last};
     var ok=last.length>=ex.sets&&last.every(function(s){return (s.reps||0)>=ex.reps});
-    return {val:ok?kg+ex.inc:kg,up:ok,last:last};
+    var add=ok?bump(kg,ex.inc):0;
+    return {val:kg+add,up:ok,last:last,add:add};
   }
   if(ex.type==='time'){
     if(!last)return {val:ex.secs,up:false,last:null};
@@ -286,7 +290,7 @@ function card(w,ex,i){
     meta='<span>'+IC.rep+what+'</span><span>'+IC.clock+REST+'s</span>';
     var chip='';
     if(ex.type==='load'&&ex.light)chip='<span class="pill">'+IC.flag+(t.val!=null?fmt(t.val)+' kg · ':'')+'Leve: sobram 2 a 3 reps</span>';
-    else if(ex.type==='load'&&t.val!=null)chip='<span class="pill'+(t.up?' up':'')+'">'+(t.up?IC.up:IC.flag)+'Hoje: '+fmt(t.val)+' kg'+(t.up?' (+'+fmt(ex.inc)+')':'')+'</span>';
+    else if(ex.type==='load'&&t.val!=null)chip='<span class="pill'+(t.up?' up':'')+'">'+(t.up?IC.up:IC.flag)+'Hoje: '+fmt(t.val)+' kg'+(t.up?' (+'+fmt(t.add)+')':'')+'</span>';
     if(ex.type==='time')chip='<span class="pill'+(t.up?' up':'')+'">'+(t.up?IC.up:IC.flag)+'Hoje: '+t.val+'s'+(t.up?' (+'+TIME_STEP+'s)':'')+'</span>';
     if(ex.type==='bw'&&t.val!=null)chip='<span class="pill">'+IC.flag+'Bater '+(t.val+1)+' reps</span>';
     goal='<div class="goal">'+chip+'<span>'+lastText(ex,t.last)+'</span></div>';
@@ -311,7 +315,7 @@ function renderTreino(){
   if(flash){h+='<div class="flash" role="status">'+flash+'</div>'}
   h+='<div class="tabs" role="tablist">'+tabs+'</div>';
   h+='<div class="bar"><div class="progress"><i style="width:'+(total?Math.round(done/total*100):0)+'%"></i></div><span><strong>'+done+'</strong> de '+total+' séries</span></div>';
-  h+='<details class="rule"><summary>'+IC.info+'Como a carga sobe</summary><p><b>Fez todas as séries com as repetições da meta?</b> No próximo treino a carga sobe sozinha.</p><p><b>Faltou repetição em alguma série?</b> Repete a mesma carga até fechar.</p><p>A meta de cada exercício aparece em azul. Se quiser usar outro peso, digite por cima.</p></details>';
+  h+='<details class="rule"><summary>'+IC.info+'Como a carga sobe</summary><p><b>Fez todas as séries com as repetições da meta?</b> No próximo treino a carga sobe cerca de 5%, arredondada para o menor salto do aparelho: 1 kg em halteres e barra, 2,5 kg em máquinas e cabos, 5 kg em leg press, smith e elevação pélvica.</p><p><b>Faltou repetição em alguma série?</b> Repete a mesma carga até fechar.</p><p>A meta de cada exercício aparece em azul. Se quiser usar outro peso, digite por cima.</p></details>';
   w.ex.forEach(function(ex,i){h+=card(w,ex,i)});
   h+='<div class="finish"><button class="btn" data-act="finish"'+(done?'':' disabled')+'>'+IC.flag+'Finalizar treino</button><p class="note">'+(done?'Só as séries marcadas entram no histórico.':'Marque as séries que fizer para liberar o botão.')+'</p></div>';
   app.innerHTML=h;
