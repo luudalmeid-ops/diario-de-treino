@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px)}body{margin:0}[hidden]{display:none!important}</style>
 <title>Diário de Treino</title>
+<meta name="author" content="@ludianderson_almeida">
 <meta name="theme-color" content="#1d5cf0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -119,12 +120,79 @@ h3{margin:8px 0 0;font-size:13px;letter-spacing:.08em;text-transform:uppercase;c
 .timer button{border:0;background:var(--blue);color:var(--on-blue);border-radius:14px;padding:10px 16px;font-weight:800}
 
 nav.nav{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:8px max(16px,env(safe-area-inset-left,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-right,0px));z-index:5}
-nav.nav .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+nav.nav .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 nav.nav button{border:0;background:transparent;color:var(--muted);border-radius:16px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:700;font-size:12px}
 nav.nav button .ic{width:44px;height:30px;border-radius:12px;display:grid;place-items:center}
 nav.nav button[aria-current="page"]{color:var(--blue-strong)}
 nav.nav button[aria-current="page"] .ic{background:var(--blue-soft)}
 @media (prefers-reduced-motion:reduce){.progress>i{transition:none}}
+/* ---------- Abertura (onboarding) ---------- */
+.ob{position:fixed;inset:0;z-index:30;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px))}
+.ob .in{max-width:480px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;gap:18px}
+.ob .dots{display:flex;gap:6px;justify-content:center;padding-top:4px}
+.ob .dots i{width:8px;height:8px;border-radius:99px;background:var(--line);transition:width .3s,background .3s}
+.ob .dots i.on{width:24px;background:var(--blue)}
+.ob .body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;padding-block:8px}
+.ob .foot{display:flex;flex-direction:column;gap:10px}
+.ob h2{margin:0;font-size:30px;line-height:1.12;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+.ob .lead{margin:0;color:var(--muted);font-size:16px;line-height:1.5}
+.ob .rise{opacity:1;animation:rise .55s cubic-bezier(.2,.8,.2,1) both}
+.ob .d1{animation-delay:.08s}.ob .d2{animation-delay:.16s}.ob .d3{animation-delay:.24s}.ob .d4{animation-delay:.32s}.ob .d5{animation-delay:.4s}.ob .d6{animation-delay:.48s}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.splash{align-items:center;text-align:center}
+.mark{width:104px;height:104px;border-radius:32px;background:var(--blue);color:#fff;display:grid;place-items:center;box-shadow:0 18px 40px rgba(29,92,240,.35);animation:pop .8s cubic-bezier(.2,1.4,.3,1) both;position:relative}
+.mark svg{width:54px;height:54px;stroke:#fff;stroke-width:2.2;fill:none;stroke-linecap:round;animation:lift 2.4s ease-in-out .8s infinite}
+.mark::after{content:"";position:absolute;inset:-10px;border-radius:40px;border:2px solid var(--blue);opacity:0;animation:ring 2.4s ease-out .8s infinite}
+@keyframes pop{from{transform:scale(.3) rotate(-20deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes lift{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes ring{0%{opacity:.5;transform:scale(.9)}100%{opacity:0;transform:scale(1.25)}}
+.splash h2{font-size:38px}
+.by{display:inline-flex;align-items:center;gap:8px;background:var(--blue-soft);color:var(--blue-strong);font-weight:800;border-radius:99px;padding:8px 14px;font-size:14px}
+.feat{display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:14px}
+.feat .fi{width:44px;height:44px;border-radius:15px;background:var(--blue);color:#fff;display:grid;place-items:center;flex:none}
+.feat b{display:block;font-size:16px}
+.feat span{color:var(--muted);font-size:14px;line-height:1.45}
+.ob label.big{display:flex;flex-direction:column;gap:8px;font-weight:700;color:var(--muted);font-size:14px}
+.ob .inp{display:flex;align-items:center;gap:8px;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:0 16px;height:62px}
+.ob .inp:focus-within{border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-soft)}
+.ob .inp input{flex:1;min-width:0;border:0;background:transparent;font-size:22px;font-weight:800;color:var(--fg);outline:0}
+.ob .inp small{font-weight:800;color:var(--muted);font-size:15px}
+.ob .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ob .two>label{min-width:0}
+.ob .inp{min-width:0}
+.ob .inp input{width:100%}
+.ob .err{color:#c0362c;font-weight:700;font-size:14px;margin:0;min-height:20px}
+.opt{display:flex;gap:14px;align-items:center;text-align:left;width:100%;border:2px solid var(--line);background:var(--card);border-radius:20px;padding:14px 16px;color:var(--fg)}
+.opt b{display:block;font-size:16px}
+.opt span{color:var(--muted);font-size:14px}
+.opt .ra{width:24px;height:24px;border-radius:99px;border:2px solid var(--line);flex:none;display:grid;place-items:center}
+.opt[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft)}
+.opt[aria-pressed="true"] .ra{border-color:var(--blue);background:var(--blue)}
+.opt[aria-pressed="true"] .ra::after{content:"";width:8px;height:8px;border-radius:99px;background:#fff}
+.imc{display:flex;align-items:center;gap:16px;background:var(--blue);color:#fff;border-radius:24px;padding:18px 20px;box-shadow:0 12px 30px rgba(29,92,240,.3)}
+.imc .v{font-size:44px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.imc .t{display:flex;flex-direction:column;gap:2px}
+.imc .t b{font-size:16px}
+.imc .t span{opacity:.85;font-size:13px;font-weight:600}
+.notes{display:flex;flex-direction:column;gap:10px}
+.note2{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px 14px}
+.note2 .k{width:30px;height:30px;border-radius:10px;background:var(--good-soft);color:var(--good);display:grid;place-items:center;flex:none}
+.note2 .k svg.i{width:16px;height:16px}
+.note2 b{display:block;font-size:15px}
+.note2 span{color:var(--muted);font-size:14px;line-height:1.45}
+.note2.warn .k{background:#fff3dc;color:#9a5b00}
+.fine{color:var(--muted);font-size:12px;text-align:center;margin:0;line-height:1.5}
+.btn.line{background:transparent;color:var(--blue-strong);box-shadow:none;border:2px solid var(--line)}
+.prof{display:flex;flex-direction:column;gap:12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px;text-align:center}
+.stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:12px;font-weight:700}
+.credit{text-align:center;color:var(--muted);font-size:13px;font-weight:700;margin:8px 0 0}
+.credit b{color:var(--blue-strong)}
+@media (prefers-reduced-motion:reduce){.ob .rise,.mark,.mark svg,.mark::after{animation:none}.ob .dots i{transition:none}}
+
 </style>
 </head>
 <body>
@@ -135,7 +203,9 @@ nav.nav button[aria-current="page"] .ic{background:var(--blue-soft)}
 <nav class="nav"><div class="in">
   <button id="nav-treino" data-view="treino"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></span>Treino</button>
   <button id="nav-evo" data-view="evo"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-9"/><path d="M15 7h5v5"/></svg></span>Evolução</button>
+  <button id="nav-perfil" data-view="perfil"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>Perfil</button>
 </div></nav>
+<div class="ob" id="ob" hidden></div>
 
 <script>
 window.onerror=function(m,u,l){
@@ -182,6 +252,158 @@ W=[W[1],W[0],W[2]];
 W[0].id=1;W[1].id=2;W[2].id=3;
 W.forEach(function(w){w.ex.push({id:'cardio-'+w.id,name:'Cardio (esteira, bike ou elíptico)',type:'check',sets:1,label:'15 minutos'})});
 var REST=50, TIME_STEP=5, KEY='treino3x-v1';
+/* ---------- Perfil e plano adaptado ---------- */
+var AUTOR='@ludianderson_almeida', PKEY='treino3x-perfil';
+var BASE=JSON.parse(JSON.stringify(W));
+var P=null, PLAN=[];
+function esc(t){return String(t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function pGet(){try{var r=localStorage.getItem(PKEY);return r?JSON.parse(r):null}catch(e){return null}}
+function pSet(){try{localStorage.setItem(PKEY,JSON.stringify(P))}catch(e){}}
+function imcOf(p){var h=p.altura/100;return p.peso/(h*h)}
+function faixa(i){return i<18.5?{k:'abaixo',t:'Abaixo do peso'}:i<25?{k:'normal',t:'Peso adequado'}:i<30?{k:'sobre',t:'Sobrepeso'}:{k:'obes',t:'Obesidade'}}
+function firstName(){return P&&P.nome?P.nome.trim().split(/\s+/)[0]:''}
+/* Monta o plano a partir do perfil. Retorna a lista de ajustes [título, explicação, aviso?] */
+function buildPlan(){
+  W=JSON.parse(JSON.stringify(BASE));REST=50;PLAN=[];
+  if(!P)return PLAN;
+  var f=faixa(imcOf(P)).k,card=15,cname='Cardio (esteira, bike ou elíptico)';
+  if(f==='abaixo'){card=10;PLAN.push(['Cardio mais curto: 10 min','Sobra mais energia para ganhar massa. Capriche na alimentação, com proteína em todas as refeições.'])}
+  else if(f==='normal'){PLAN.push(['Plano padrão','Seu peso está na faixa adequada. Cardio de 15 min no fim de cada treino.'])}
+  else if(f==='sobre'){card=20;PLAN.push(['Cardio de 20 min','Um pouco mais de gasto calórico no fim de cada treino.'])}
+  else{
+    card=25;cname='Cardio (bike ou elíptico)';
+    PLAN.push(['Cardio de 25 min na bike ou no elíptico','Mais gasto calórico, com menos impacto nos joelhos do que a esteira.']);
+    PLAN.push(['Cadeira extensora no lugar do agachamento unilateral','Mais estável e mais leve para os joelhos no começo.']);
+    PLAN.push(['Prancha começa com 20s','O tempo sobe 5s sempre que você completar as 3 séries.']);
+  }
+  W.forEach(function(w){w.ex.forEach(function(ex,ix){
+    if(ex.id.indexOf('cardio-')===0){ex.label=card+' minutos';ex.name=cname}
+    if(f==='obes'&&ex.id==='t3-unil')w.ex[ix]={id:'t3-ext',name:'Cadeira extensora',type:'load',sets:3,reps:12,inc:2.5};
+    if(f==='obes'&&ex.id==='t2-prancha')ex.secs=20;
+  })});
+  if(P.nivel==='ini'){
+    REST=60;
+    PLAN.push(['Descanso de 60s','Mais tempo entre as séries enquanto o corpo se adapta.']);
+    var left=Math.max(0,6-S.sessions.length);
+    if(left>0){
+      W.forEach(function(w){w.ex.forEach(function(ex){if(ex.type!=='check')ex.sets=Math.min(ex.sets,2)})});
+      PLAN.push(['2 séries nos primeiros 6 treinos','Faltam '+left+(left===1?' treino':' treinos')+'. Depois o app passa para 3 séries sozinho.']);
+    }else PLAN.push(['3 séries por exercício','Você já passou da fase de adaptação.']);
+  }else if(P.nivel==='ava'){
+    PLAN.push(['Este programa pode ser leve para você','Para quem treina há mais de 2 anos, use como fase de recomeço ou manutenção.',true]);
+  }
+  return PLAN;
+}
+function planHtml(cls){
+  return '<div class="notes">'+PLAN.map(function(n,i){return '<div class="note2'+(n[2]?' warn':'')+' '+(cls?cls+' d'+Math.min(6,i+2):'')+'"><span class="k">'+(n[2]?IC.info:IC.check)+'</span><div><b>'+esc(n[0])+'</b><span>'+esc(n[1])+'</span></div></div>'}).join('')+'</div>';
+}
+
+/* ---------- Abertura animada ---------- */
+var ob={step:0,nome:'',altura:'',peso:'',nivel:'',err:'',edit:false};
+var obEl=document.getElementById('ob');
+var NIV=[['ini','Começando agora','Nunca treinei ou parei há mais de 6 meses'],['int','Já treino','Treino com frequência há menos de 2 anos'],['ava','Treino há bastante tempo','Mais de 2 anos treinando com frequência']];
+function openOb(step,edit){
+  ob.step=step||0;ob.edit=!!edit;ob.err='';
+  if(P){ob.nome=P.nome;ob.altura=String(P.altura);ob.peso=String(P.peso);ob.nivel=P.nivel}
+  obEl.hidden=false;document.body.style.overflow='hidden';renderOb();
+}
+function closeOb(){obEl.hidden=true;document.body.style.overflow='';stopCount()}
+var countT=null;
+function stopCount(){if(countT){clearInterval(countT);countT=null}}
+function renderOb(){
+  stopCount();
+  var st=ob.step,total=6,h='<div class="in">';
+  h+='<div class="dots" aria-hidden="true">'+Array.apply(null,{length:total}).map(function(_,i){return '<i class="'+(i===st?'on':'')+'"></i>'}).join('')+'</div>';
+  var nm=esc(ob.nome.trim().split(/\s+/)[0]||'');
+  if(st===0){
+    h+='<div class="body splash"><div class="mark"><svg viewBox="0 0 24 24"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></div>'
+      +'<h2 class="rise d2">Diário de Treino</h2>'
+      +'<p class="lead rise d3">Seu treino de academia no bolso, com a carga subindo sozinha.</p>'
+      +'<span class="by rise d4">Desenvolvido por '+AUTOR+'</span></div>'
+      +'<div class="foot rise d5"><button class="btn" data-ob="next">Começar</button></div>';
+  }else if(st===1){
+    h+='<div class="body"><h2 class="rise">Como funciona</h2>'
+      +'<div class="feat rise d1"><span class="fi">'+IC.rep+'</span><div><b>3 treinos de corpo inteiro</b><span>Você treina 3 vezes por semana, em dias alternados, na ordem 1, 2, 3.</span></div></div>'
+      +'<div class="feat rise d2"><span class="fi">'+IC.up+'</span><div><b>A carga sobe sozinha</b><span>Fechou todas as séries? No próximo treino a meta sobe cerca de 5%.</span></div></div>'
+      +'<div class="feat rise d3"><span class="fi">'+IC.clock+'</span><div><b>Descanso cronometrado</b><span>Marcou a série, o cronômetro começa e o celular vibra no fim.</span></div></div>'
+      +'<div class="feat rise d4"><span class="fi">'+IC.flag+'</span><div><b>Seus dados ficam no seu celular</b><span>Nada é enviado para lugar nenhum. Use sempre o mesmo navegador.</span></div></div>'
+      +'</div><div class="foot rise d5"><button class="btn" data-ob="next">Continuar</button></div>';
+  }else if(st===2){
+    h+='<div class="body"><h2 class="rise">Como podemos te chamar?</h2>'
+      +'<label class="big rise d1">Seu nome<span class="inp"><input id="ob-nome" type="text" autocomplete="given-name" maxlength="40" placeholder="Digite seu nome" value="'+esc(ob.nome)+'"></span></label>'
+      +'<p class="err" role="alert">'+esc(ob.err)+'</p></div>'
+      +'<div class="foot rise d2"><button class="btn" data-ob="next">Continuar</button>'+'<button class="btn line" data-ob="back">'+(ob.edit?'Cancelar':'Voltar')+'</button>'+'</div>';
+  }else if(st===3){
+    h+='<div class="body"><h2 class="rise">Prazer, '+nm+'!</h2><p class="lead rise d1">Com sua altura e seu peso, o app ajusta o cardio e alguns exercícios para você.</p>'
+      +'<div class="two rise d2"><label class="big">Altura<span class="inp"><input id="ob-alt" type="text" inputmode="decimal" maxlength="4" placeholder="175" value="'+esc(ob.altura)+'"><small>cm</small></span></label>'
+      +'<label class="big">Peso<span class="inp"><input id="ob-peso" type="text" inputmode="decimal" maxlength="5" placeholder="78" value="'+esc(ob.peso)+'"><small>kg</small></span></label></div>'
+      +'<p class="err" role="alert">'+esc(ob.err)+'</p></div>'
+      +'<div class="foot rise d3"><button class="btn" data-ob="next">Continuar</button><button class="btn line" data-ob="back">Voltar</button></div>';
+  }else if(st===4){
+    h+='<div class="body"><h2 class="rise">'+nm+', há quanto tempo você treina?</h2>'
+      +NIV.map(function(n,i){return '<button class="opt rise d'+(i+1)+'" data-ob="nivel" data-v="'+n[0]+'" aria-pressed="'+(ob.nivel===n[0])+'"><span class="ra"></span><div><b>'+n[1]+'</b><span>'+n[2]+'</span></div></button>'}).join('')
+      +'<p class="err" role="alert">'+esc(ob.err)+'</p></div>'
+      +'<div class="foot rise d4"><button class="btn" data-ob="next">Ver meu plano</button><button class="btn line" data-ob="back">Voltar</button></div>';
+  }else{
+    var i=imcOf(P),fx=faixa(i);
+    h+='<div class="body"><h2 class="rise">Pronto, '+esc(firstName())+'! Este é o seu plano.</h2>'
+      +'<div class="imc rise d1"><span class="v" id="imc-v">0,0</span><div class="t"><b>'+fx.t+'</b><span>Seu IMC · '+esc(P.altura)+' cm · '+esc(fmt(P.peso))+' kg</span></div></div>'
+      +planHtml('rise')
+      +'<p class="fine rise d6">O IMC é uma referência simples e não mede gordura nem músculo. Este plano não substitui a avaliação de um profissional de educação física ou de saúde.</p></div>'
+      +'<div class="foot rise d6"><button class="btn" data-ob="done">'+(ob.edit?'Salvar e voltar':'Ir para o treino')+'</button>'+(ob.edit?'':'<button class="btn line" data-ob="back">Voltar</button>')+'</div>';
+  }
+  h+='</div>';
+  obEl.innerHTML=h;obEl.scrollTop=0;
+  if(st===5){
+    var target=Math.round(imcOf(P)*10)/10,v=0,el=document.getElementById('imc-v'),steps=24,k=0;
+    var reduce=false;try{reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
+    if(reduce){el.textContent=fmt(target)}else countT=setInterval(function(){k++;v=target*k/steps;el.textContent=fmt(Math.round(v*10)/10);if(k>=steps){el.textContent=fmt(target);stopCount()}},30);
+  }
+  var f=obEl.querySelector('input');if(f&&st>=2)setTimeout(function(){try{f.focus({preventScroll:true})}catch(e){}},350);
+}
+function obNext(){
+  ob.err='';
+  if(ob.step===2){
+    var n=document.getElementById('ob-nome').value.trim();ob.nome=n;
+    if(n.length<2){ob.err='Digite seu nome para continuar.';renderOb();return}
+  }else if(ob.step===3){
+    var a=num(document.getElementById('ob-alt').value),p=num(document.getElementById('ob-peso').value);
+    ob.altura=document.getElementById('ob-alt').value;ob.peso=document.getElementById('ob-peso').value;
+    if(a!=null&&a<3)a=a*100;
+    if(a==null||a<120||a>230){ob.err='Digite a altura em centímetros, entre 120 e 230. Exemplo: 175.';renderOb();return}
+    if(p==null||p<30||p>250){ob.err='Digite o peso em quilos, entre 30 e 250. Exemplo: 78.';renderOb();return}
+    ob.altura=String(Math.round(a));ob.peso=String(p);
+  }else if(ob.step===4){
+    if(!ob.nivel){ob.err='Escolha uma opção para continuar.';renderOb();return}
+    P={nome:ob.nome,altura:+ob.altura,peso:+ob.peso,nivel:ob.nivel,criado:(P&&P.criado)||new Date().toISOString()};
+    pSet();buildPlan();
+  }
+  ob.step=Math.min(5,ob.step+1);renderOb();
+}
+obEl.addEventListener('click',function(e){
+  var b=e.target.closest('[data-ob]');if(!b)return;
+  var a=b.dataset.ob;
+  if(a==='next')obNext();
+  else if(a==='back'){if(ob.edit&&ob.step===2){closeOb();return}ob.err='';if(ob.step===2)ob.nome=document.getElementById('ob-nome').value;if(ob.step===3){ob.altura=document.getElementById('ob-alt').value;ob.peso=document.getElementById('ob-peso').value}ob.step=Math.max(ob.edit?2:0,ob.step-1);renderOb()}
+  else if(a==='nivel'){ob.nivel=b.dataset.v;ob.err='';obEl.querySelectorAll('.opt').forEach(function(o){o.setAttribute('aria-pressed',String(o.dataset.v===ob.nivel))})}
+  else if(a==='done'){var wasEdit=ob.edit;closeOb();view=wasEdit?'perfil':'treino';cur=nextWorkout();render();window.scrollTo(0,0)}
+});
+obEl.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();obNext()}});
+
+function renderPerfil(){
+  var h=header('Perfil');
+  if(!P){h+='<div class="empty">Você ainda não preencheu seus dados.</div><button class="btn" data-act="perfil-edit">Preencher meus dados</button>';app.innerHTML=h;return}
+  var i=imcOf(P),fx=faixa(i),nv=NIV.filter(function(n){return n[0]===P.nivel})[0];
+  h+='<div class="prof"><div class="imc"><span class="v">'+fmt(Math.round(i*10)/10)+'</span><div class="t"><b>'+esc(P.nome)+'</b><span>IMC · '+fx.t+' · '+(nv?nv[1]:'')+'</span></div></div>'
+    +'<div class="stats"><div class="stat"><b>'+esc(P.altura)+'</b><span>cm</span></div><div class="stat"><b>'+esc(fmt(P.peso))+'</b><span>kg</span></div><div class="stat"><b>'+S.sessions.length+'</b><span>treinos</span></div></div>'
+    +'<h3>Ajustes do seu plano</h3>'+planHtml('')
+    +'<button class="btn" data-act="perfil-edit">Atualizar peso e dados</button>'
+    +'<button class="btn line" data-act="perfil-intro">Ver a apresentação de novo</button>'
+    +'<p class="fine">O IMC é uma referência simples e não mede gordura nem músculo. Este plano não substitui a avaliação de um profissional.</p>'
+    +'<p class="credit">Desenvolvido por <b>'+AUTOR+'</b></p></div>';
+  app.innerHTML=h;
+}
+
 
 /* ---------- Estado e armazenamento ---------- */
 var S={sessions:[],draft:{},updated:0};
@@ -276,7 +498,8 @@ function dateLabel(){
   try{return new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'})}catch(e){return ''}
 }
 function header(t){
-  return '<header class="top"><div class="eyebrow">'+dateLabel()+'</div><h1>'+t+'</h1></header>';
+  var hi=firstName()?'Bora, '+esc(firstName())+' · ':'';
+  return '<header class="top"><div class="eyebrow">'+hi+dateLabel()+'</div><h1>'+t+'</h1></header>';
 }
 function card(w,ex,i){
   var d=draftFor(w,ex),t=target(ex),done=d.filter(function(s){return s.done}).length;
@@ -359,7 +582,8 @@ function render(){
   var y=window.scrollY;
   document.getElementById('nav-treino').setAttribute('aria-current',view==='treino'?'page':'false');
   document.getElementById('nav-evo').setAttribute('aria-current',view==='evo'?'page':'false');
-  if(view==='treino')renderTreino();else renderEvo();
+  document.getElementById('nav-perfil').setAttribute('aria-current',view==='perfil'?'page':'false');
+  if(view==='treino')renderTreino();else if(view==='perfil')renderPerfil();else renderEvo();
   window.scrollTo(0,y);
 }
 
@@ -402,6 +626,8 @@ document.addEventListener('click',function(e){
     flash='';save();render();return;
   }
   if(act==='finish'){finish();return}
+  if(act==='perfil-edit'){openOb(2,!!P);return}
+  if(act==='perfil-intro'){openOb(0,false);return}
   if(act==='del'){
     var i=+el.dataset.i;
     if(armed===i){S.sessions.splice(i,1);armed=null;save()}else armed=i;
@@ -422,6 +648,7 @@ function finish(){
   delete S.draft[w.id];
   var ups=0;w.ex.forEach(function(e){if(e.type!=='check'&&ex[e.id]&&target(e).up)ups++});
   stopRest();
+  buildPlan();
   cur=nextWorkout();
   flash='Treino salvo. '+(ups?ups+(ups===1?' exercício sobe':' exercícios sobem')+' de carga na próxima vez.':'Mantenha as cargas até fechar todas as repetições.');
   save();render();window.scrollTo(0,0);
@@ -430,8 +657,10 @@ function finish(){
 /* ---------- Início ---------- */
 (function boot(){
   var l=lsGet();if(l&&l.sessions){S=l;if(!S.draft)S.draft={}}
+  P=pGet();buildPlan();
   cur=nextWorkout();
   render();
+  if(!P)openOb(0,false);
   try{if(navigator.wakeLock)navigator.wakeLock.request('screen').catch(function(){})}catch(e){}
 })();
 </script>
