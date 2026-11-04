@@ -255,16 +255,17 @@ var COMP=150, ISO=75;   /* descanso: compostos 2–3 min, isoladores 60–90 s *
 function L(id,name,sets,lo,hi,step,comp,per){return {id:id,name:name,type:'load',sets:sets,lo:lo,hi:hi,step:step,rest:comp?COMP:ISO,comp:!!comp,per:!!per}}
 function warm(k){return {id:k+'-aq',name:'Aquecimento',type:'check',sets:1,label:'5 min leves + 1 série leve do 1º exercício'}}
 function cardio(k){return {id:k+'-cardio',name:'Cardio moderado',type:'cardio',sets:1,label:'10 a 15 min, se couber nos 60 min'}}
-var W=[
- {id:1,key:'A',dia:'Segunda',foco:'Quadríceps e glúteos',ex:[warm('a'),
+var PROGRAMS={
+ inf:{nome:'Glúteos e pernas',curto:'Inferiores',desc:'Prioridade em glúteos, quadríceps e posteriores. Parte de cima em menor volume, para manter e equilibrar.',W:[
+  {id:1,key:'A',dia:'Segunda',foco:'Quadríceps e glúteos',ex:[warm('a'),
    L('t2-leg','Leg press',3,8,12,5,true),
    L('t2-pelvica','Elevação pélvica',3,8,12,5,true),
    L('a-ext','Cadeira extensora',3,10,15,2.5),
    L('a-abd','Cadeira abdutora',2,12,20,2.5),
    L('t1-pux','Puxada frontal',2,10,12,2.5,true),
-   {id:'t2-prancha',name:'Prancha',type:'time',sets:2,lo:30,hi:45,step:5,rest:ISO},
+   T('t2-prancha','Prancha',2,30,45),
    cardio('a')]},
- {id:2,key:'B',dia:'Quarta',foco:'Posteriores e glúteos',ex:[warm('b'),
+  {id:2,key:'B',dia:'Quarta',foco:'Posteriores e glúteos',ex:[warm('b'),
    L('t3-stiff','Stiff com halteres',3,8,12,1,true),
    L('b-flex','Mesa flexora',3,10,15,2.5),
    L('b-bulg','Agachamento búlgaro',2,8,12,1,true,true),
@@ -272,15 +273,73 @@ var W=[
    L('t2-remada','Remada baixa',2,10,12,2.5,true),
    L('b-abdpolia','Abdominal na polia',2,12,15,2.5),
    cardio('b')]},
- {id:3,key:'C',dia:'Sexta',foco:'Inferiores completos',ex:[warm('c'),
+  {id:3,key:'C',dia:'Sexta',foco:'Inferiores completos',ex:[warm('c'),
    L('t1-smith','Agachamento no smith',3,8,12,5,true),
    L('c-pelvica','Elevação pélvica',2,10,12,5,true),
    L('c-flex','Mesa flexora',2,10,15,2.5),
    L('c-ext','Cadeira extensora',2,10,15,2.5),
-   L('t3-desen','Desenvolvimento na máquina',2,10,12,2.5,true),
+   L('t2-inclinado','Supino inclinado na máquina',2,10,12,2.5,true),
    L('t1-crunch','Abdominal crunch na máquina',2,12,15,2.5),
-   cardio('c')]}
-];
+   cardio('c')]}]},
+ eq:{nome:'Corpo equilibrado',curto:'Equilibrado',desc:'Pernas e parte de cima com o mesmo peso: peito, costas, ombro e braço em todas as semanas.',W:[
+  {id:1,key:'A',dia:'Segunda',foco:'Pernas e empurrar',ex:[warm('a'),
+   L('t2-leg','Leg press',3,8,12,5,true),
+   L('a-ext','Cadeira extensora',2,10,15,2.5),
+   L('t1-supino','Supino reto com halteres',3,8,12,1,true),
+   L('t3-desen','Desenvolvimento na máquina',2,8,12,2.5,true),
+   L('t1-triceps','Tríceps corda no pulley',2,10,15,2.5),
+   T('t2-prancha','Prancha',2,30,45),
+   cardio('a')]},
+  {id:2,key:'B',dia:'Quarta',foco:'Posteriores e puxar',ex:[warm('b'),
+   L('t3-stiff','Stiff com halteres',3,8,12,1,true),
+   L('b-flex','Mesa flexora',2,10,15,2.5),
+   L('t1-pux','Puxada frontal',3,8,12,2.5,true),
+   L('t2-remada','Remada baixa',2,8,12,2.5,true),
+   L('t1-rosca','Rosca direta com barra',2,10,12,1),
+   L('b-abdpolia','Abdominal na polia',2,12,15,2.5),
+   cardio('b')]},
+  {id:3,key:'C',dia:'Sexta',foco:'Corpo inteiro',ex:[warm('c'),
+   L('t1-smith','Agachamento no smith',3,8,12,5,true),
+   L('t2-pelvica','Elevação pélvica',3,8,12,5,true),
+   L('t2-inclinado','Supino inclinado na máquina',2,8,12,2.5,true),
+   L('s-remuni','Remada unilateral com halter',2,8,12,1,true),
+   L('t2-lateral','Elevação lateral com halteres',2,12,15,1),
+   L('t1-crunch','Abdominal crunch na máquina',2,12,15,2.5),
+   cardio('c')]}]},
+ sup:{nome:'Parte de cima',curto:'Superiores',desc:'Prioridade em peito, costas, ombro e braço. Pernas em menor volume, para manter.',W:[
+  {id:1,key:'A',dia:'Segunda',foco:'Peito, ombro e tríceps',ex:[warm('a'),
+   L('t1-supino','Supino reto com halteres',3,8,12,1,true),
+   L('t2-inclinado','Supino inclinado na máquina',3,8,12,2.5,true),
+   L('t3-desen','Desenvolvimento na máquina',2,8,12,2.5,true),
+   L('t2-lateral','Elevação lateral com halteres',3,12,15,1),
+   L('t1-triceps','Tríceps corda no pulley',2,10,15,2.5),
+   L('t2-leg','Leg press',2,10,12,5,true),
+   cardio('a')]},
+  {id:2,key:'B',dia:'Quarta',foco:'Costas e bíceps',ex:[warm('b'),
+   L('t1-pux','Puxada frontal',3,8,12,2.5,true),
+   L('t2-remada','Remada baixa',3,8,12,2.5,true),
+   L('s-crucinv','Crucifixo inverso na máquina',2,12,15,2.5),
+   L('t1-rosca','Rosca direta com barra',3,10,12,1),
+   L('t3-stiff','Stiff com halteres',2,8,12,1,true),
+   L('b-abdpolia','Abdominal na polia',2,12,15,2.5),
+   cardio('b')]},
+  {id:3,key:'C',dia:'Sexta',foco:'Corpo inteiro',ex:[warm('c'),
+   L('t1-smith','Agachamento no smith',3,8,12,5,true),
+   L('c-flex','Mesa flexora',2,10,15,2.5),
+   L('t3-cruc','Crucifixo na máquina',2,10,15,2.5),
+   L('s-remuni','Remada unilateral com halter',2,8,12,1,true),
+   L('t3-testa','Tríceps testa com halter',2,10,12,1),
+   L('t1-crunch','Abdominal crunch na máquina',2,12,15,2.5),
+   cardio('c')]}]}
+};
+var FOCOS=['inf','eq','sup'];
+var W=PROGRAMS.inf.W;
+function T(id,name,sets,lo,hi){return {id:id,name:name,type:'time',sets:sets,lo:lo,hi:hi,step:5,rest:ISO}}
+function setFocus(k){if(!PROGRAMS[k])k='inf';W=PROGRAMS[k].W}
+function focoOf(){return PROGRAMS[(P&&P.foco)||'inf']}
+/* Séries semanais por região, para mostrar na escolha do foco */
+var LOWER={'t2-leg':1,'t2-pelvica':1,'a-ext':1,'a-abd':1,'t3-stiff':1,'b-flex':1,'b-bulg':1,'b-coice':1,'t1-smith':1,'c-pelvica':1,'c-flex':1,'c-ext':1};
+function volume(k){var lo=0,up=0;PROGRAMS[k].W.forEach(function(w){w.ex.forEach(function(e){if(e.type!=='load')return;if(LOWER[e.id])lo+=e.sets;else if(!/crunch|abdpolia/.test(e.id))up+=e.sets})});return {lo:lo,up:up}}
 var ORDER=[1,2,3];
 
 /* ---------- Estado ---------- */
@@ -462,7 +521,7 @@ function renderPerfil(){
   var h=header('Perfil');
   if(!P){h+='<div class="empty">Você ainda não preencheu seus dados.</div><button class="btn" data-act="perfil-edit">Preencher meus dados</button>';app.innerHTML=h;return}
   var i=imcOf(P),B=S.body||[];
-  h+='<div class="prof"><div class="imc"><span class="v">'+fmt(Math.round(i*10)/10)+'</span><div class="t"><b>'+esc(P.nome)+'</b><span>IMC · '+faixa(i)+'</span></div></div>'
+  h+='<div class="prof"><div class="imc"><span class="v">'+fmt(Math.round(i*10)/10)+'</span><div class="t"><b>'+esc(P.nome)+'</b><span>Foco: '+focoOf().nome+' · IMC '+faixa(i).toLowerCase()+'</span></div></div>'
     +'<div class="stats"><div class="stat"><b>'+esc(P.altura)+'</b><span>cm</span></div><div class="stat"><b>'+esc(fmt(P.peso))+'</b><span>kg</span></div><div class="stat"><b>'+S.sessions.length+'</b><span>treinos</span></div></div>'
     +'<div class="card"><h2 style="margin:0;font-size:16px">Peso e medidas</h2><p class="note" style="text-align:left;margin:0">Registre a cada 1 ou 2 semanas, de manhã, em jejum. As medidas são opcionais.</p>'
     +'<div class="form">'
@@ -476,7 +535,7 @@ function renderPerfil(){
     if(pv.length>1)h+='<div class="evo"><span class="note" style="text-align:left">Peso ao longo do tempo</span>'+spark(pv)+'<div class="nums">'+fmt(pv[pv.length-1])+' kg<small>'+(function(){var d=pv[pv.length-1]-pv[0];return (d>0?'+':'')+fmt(d)+' kg desde o início'})()+'</small></div></div>';
     h+='<div class="hx">'+B.slice(-8).reverse().map(function(x){var p=[];if(x.peso)p.push(fmt(x.peso)+' kg');if(x.cintura)p.push('cintura '+fmt(x.cintura));if(x.quadril)p.push('quadril '+fmt(x.quadril));if(x.coxa)p.push('coxa '+fmt(x.coxa));return '<div><span>'+esc(x.label)+'</span><b>'+p.join(' · ')+'</b></div>'}).join('')+'</div>';
   }
-  h+='</div><button class="btn line" data-act="perfil-edit">Editar nome e altura</button>'
+  h+='</div><button class="btn" data-act="perfil-foco">Trocar o foco do treino</button><button class="btn line" data-act="perfil-edit">Editar nome, altura e peso</button>'
     +'<button class="btn line" data-act="perfil-intro">Ver a apresentação de novo</button>'
     +'<p class="fine">O IMC é uma referência simples e não mede gordura nem músculo. Cintura, quadril e coxa mostram melhor a recomposição corporal. Este app não substitui um profissional de educação física.</p>'
     +'<p class="credit">Desenvolvido por <b>'+AUTOR+'</b></p></div>';
@@ -534,8 +593,9 @@ document.addEventListener('click',function(e){
     if(!any)return;
     S.body.push(o);if(o.peso){P.peso=o.peso;lsSet(PKEY,P)}saveNow();render();return;
   }
-  if(act==='perfil-edit'){openOb(2,!!P);return}
-  if(act==='perfil-intro'){openOb(0,false);return}
+  if(act==='perfil-edit'){if(P)openOb(2,'dados');else openOb(0,'');return}
+  if(act==='perfil-foco'){openOb(5,'foco');return}
+  if(act==='perfil-intro'){openOb(0,'');return}
 });
 function shortDate(){try{return new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}).replace('.','')}catch(x){return ''}}
 function finish(){
@@ -548,7 +608,7 @@ function finish(){
     ex[e.id]=sets.map(function(s){return {kg:num(s.kg),reps:num(s.reps)||0}});n++;
   });
   if(!n&&!cmin)return;
-  S.sessions.push({treino:w.id,date:new Date().toISOString(),label:shortDate(),ex:ex,cardio:cmin});
+  S.sessions.push({treino:w.id,foco:(P&&P.foco)||'inf',date:new Date().toISOString(),label:shortDate(),ex:ex,cardio:cmin});
   delete S.draft[w.id];
   var ups=0;w.ex.forEach(function(e){if(e.type==='load'&&ex[e.id]&&target(e).up)ups++});
   stopRest();cur=nextWorkout();
@@ -557,10 +617,13 @@ function finish(){
 }
 
 /* ---------- Abertura animada ---------- */
-var ob={step:0,nome:'',altura:'',peso:'',err:'',edit:false},obEl=document.getElementById('ob'),countT=null;
-function openOb(step,edit){
-  ob.step=step||0;ob.edit=!!edit;ob.err='';
-  if(P){ob.nome=P.nome;ob.altura=String(P.altura);ob.peso=String(P.peso)}
+/* Passos: 0 apresentação · 1 como funciona · 2 nome · 3 tratamento · 4 altura e peso · 5 foco · 6 semana */
+var ob={step:0,nome:'',trat:'',altura:'',peso:'',foco:'',err:'',mode:''},obEl=document.getElementById('ob'),countT=null;
+var TRAT=[['f','No feminino','“Bem-vinda”, “pronta”'],['m','No masculino','“Bem-vindo”, “pronto”'],['n','Tanto faz','Linguagem neutra']];
+function g(f,m,n){var t=(P&&P.trat)||ob.trat;return t==='f'?f:t==='m'?m:n}
+function openOb(step,mode){
+  ob.step=step||0;ob.mode=mode||'';ob.err='';
+  if(P){ob.nome=P.nome;ob.trat=P.trat||'';ob.altura=String(P.altura);ob.peso=String(P.peso);ob.foco=P.foco||''}
   obEl.hidden=false;document.body.style.overflow='hidden';renderOb();
 }
 function stopCount(){if(countT){clearInterval(countT);countT=null}}
@@ -571,19 +634,21 @@ function weekPlan(cls){
   h+='<div class="wp off '+(cls?cls+' d5':'')+'"><span class="badge">'+IC.walk+'</span><div><b>Terça, quinta e fim de semana</b><span>Caminhada leve a moderada</span></div></div>';
   return h+'</div>';
 }
+function optBtn(kind,v,title,sub,on,i){return '<button class="opt rise d'+(i+1)+'" data-ob="'+kind+'" data-v="'+v+'" aria-pressed="'+on+'"><span class="ra"></span><div><b>'+title+'</b><span>'+sub+'</span></div></button>'}
+function back2(){return '<button class="btn line" data-ob="back">'+(ob.mode&&ob.step===(ob.mode==='foco'?5:2)?'Cancelar':'Voltar')+'</button>'}
 function renderOb(){
   stopCount();
-  var st=ob.step,total=5,h='<div class="in">',nm=esc(ob.nome.trim().split(/\s+/)[0]||'');
+  var st=ob.step,total=7,h='<div class="in">',nm=esc(ob.nome.trim().split(/\s+/)[0]||'');
   h+='<div class="dots" aria-hidden="true">'+Array.apply(null,{length:total}).map(function(_,i){return '<i class="'+(i===st?'on':'')+'"></i>'}).join('')+'</div>';
   if(st===0){
     h+='<div class="body splash"><div class="mark"><svg viewBox="0 0 24 24"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></div>'
       +'<h2 class="rise d2">Diário de Treino</h2>'
-      +'<p class="lead rise d3">Três treinos por semana, com prioridade para glúteos e pernas, e a sua evolução registrada série por série.</p>'
+      +'<p class="lead rise d3">Três treinos por semana, no foco que você escolher, com a sua evolução registrada série por série.</p>'
       +'<span class="by rise d4">Desenvolvido por '+AUTOR+'</span></div>'
       +'<div class="foot rise d5"><button class="btn" data-ob="next">Começar</button></div>';
   }else if(st===1){
     h+='<div class="body"><h2 class="rise">Como funciona</h2>'
-      +'<div class="feat rise d1"><span class="fi">'+IC.leg+'</span><div><b>Foco em glúteos e pernas</b><span>Três treinos de corpo inteiro, com membros superiores em menor volume.</span></div></div>'
+      +'<div class="feat rise d1"><span class="fi">'+IC.leg+'</span><div><b>Você escolhe o foco</b><span>Glúteos e pernas, corpo equilibrado ou parte de cima. Dá para trocar depois.</span></div></div>'
       +'<div class="feat rise d2"><span class="fi">'+IC.up+'</span><div><b>Progressão dupla</b><span>Primeiro sobem as repetições. Quando todas as séries chegam ao topo da faixa, sobe a carga.</span></div></div>'
       +'<div class="feat rise d3"><span class="fi">'+IC.clock+'</span><div><b>Descanso certo para cada exercício</b><span>2 a 3 minutos nos compostos e 60 a 90 segundos nos isoladores.</span></div></div>'
       +'<div class="feat rise d4"><span class="fi">'+IC.flag+'</span><div><b>Seus dados ficam no seu celular</b><span>Nada é enviado para lugar nenhum. Use sempre o mesmo navegador.</span></div></div>'
@@ -592,55 +657,77 @@ function renderOb(){
     h+='<div class="body"><h2 class="rise">Como podemos te chamar?</h2>'
       +'<label class="big rise d1">Seu nome<span class="inp"><input id="ob-nome" type="text" autocomplete="given-name" maxlength="40" placeholder="Digite seu nome" value="'+esc(ob.nome)+'"></span></label>'
       +'<p class="err" role="alert">'+esc(ob.err)+'</p></div>'
-      +'<div class="foot rise d2"><button class="btn" data-ob="next">Continuar</button><button class="btn line" data-ob="back">'+(ob.edit?'Cancelar':'Voltar')+'</button></div>';
+      +'<div class="foot rise d2"><button class="btn" data-ob="next">Continuar</button>'+back2()+'</div>';
   }else if(st===3){
-    h+='<div class="body"><h2 class="rise">Prazer, '+nm+'!</h2><p class="lead rise d1">Sua altura e seu peso servem de ponto de partida para acompanhar a sua recomposição corporal.</p>'
+    h+='<div class="body"><h2 class="rise">Prazer, '+nm+'! Como o app deve falar com você?</h2>'
+      +TRAT.map(function(t,i){return optBtn('trat',t[0],t[1],t[2],ob.trat===t[0],i)}).join('')
+      +'<p class="fine rise d4" style="text-align:left">Isso muda só a linguagem. O treino é escolhido pelo foco, no próximo passo.</p>'
+      +'<p class="err" role="alert">'+esc(ob.err)+'</p></div>'
+      +'<div class="foot rise d5"><button class="btn" data-ob="next">Continuar</button>'+back2()+'</div>';
+  }else if(st===4){
+    h+='<div class="body"><h2 class="rise">'+nm+', qual é a sua altura e o seu peso?</h2><p class="lead rise d1">É o ponto de partida para acompanhar a sua recomposição corporal.</p>'
       +'<div class="two rise d2"><label class="big">Altura<span class="inp"><input id="ob-alt" type="text" inputmode="decimal" maxlength="4" placeholder="175" value="'+esc(ob.altura)+'"><small>cm</small></span></label>'
       +'<label class="big">Peso<span class="inp"><input id="ob-peso" type="text" inputmode="decimal" maxlength="5" placeholder="78" value="'+esc(ob.peso)+'"><small>kg</small></span></label></div>'
       +'<p class="err" role="alert">'+esc(ob.err)+'</p></div>'
-      +'<div class="foot rise d3"><button class="btn" data-ob="next">'+(ob.edit?'Salvar':'Ver minha semana')+'</button><button class="btn line" data-ob="back">Voltar</button></div>';
+      +'<div class="foot rise d3"><button class="btn" data-ob="next">'+(ob.mode==='dados'?'Salvar':'Continuar')+'</button>'+back2()+'</div>';
+  }else if(st===5){
+    h+='<div class="body"><h2 class="rise">Qual é o seu foco, '+nm+'?</h2>'
+      +FOCOS.map(function(k,i){var p=PROGRAMS[k],v=volume(k);return optBtn('foco',k,p.nome,p.desc+' <br><strong style="color:var(--blue-strong)">'+v.lo+' séries de pernas · '+v.up+' de parte de cima por semana</strong>',ob.foco===k,i)}).join('')
+      +'<p class="err" role="alert">'+esc(ob.err)+'</p></div>'
+      +'<div class="foot rise d4"><button class="btn" data-ob="next">Ver minha semana</button>'+back2()+'</div>';
   }else{
-    var i=imcOf(P);
-    h+='<div class="body"><h2 class="rise">Pronto, '+esc(firstName())+'! Esta é a sua semana.</h2>'
-      +'<div class="imc rise d1"><span class="v" id="imc-v">0</span><div class="t"><b>'+faixa(i)+'</b><span>Seu IMC · '+esc(P.altura)+' cm · '+esc(fmt(P.peso))+' kg</span></div></div>'
+    var i=imcOf(P);setFocus(P.foco);
+    h+='<div class="body"><h2 class="rise">'+g('Pronta','Pronto','Tudo pronto')+', '+esc(firstName())+'! Esta é a sua semana.</h2>'
+      +'<div class="imc rise d1"><span class="v" id="imc-v">0</span><div class="t"><b>Foco: '+focoOf().nome+'</b><span>IMC '+faixa(i).toLowerCase()+' · '+esc(P.altura)+' cm · '+esc(fmt(P.peso))+' kg</span></div></div>'
       +weekPlan('rise')
       +'<p class="fine rise d6">O IMC é só uma referência e não mede gordura nem músculo. Este app não substitui a orientação de um profissional de educação física.</p></div>'
-      +'<div class="foot rise d6"><button class="btn" data-ob="done">Ir para o treino</button></div>';
+      +'<div class="foot rise d6"><button class="btn" data-ob="done">'+(ob.mode?'Salvar e voltar':'Ir para o treino')+'</button></div>';
   }
   obEl.innerHTML=h+'</div>';obEl.scrollTop=0;
-  if(st===4){
+  if(st===6){
     var tg=Math.round(imcOf(P)*10)/10,k=0,el=document.getElementById('imc-v'),reduce=false;
     try{reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
     if(reduce)el.textContent=fmt(tg);else countT=setInterval(function(){k++;el.textContent=fmt(Math.round(tg*k/24*10)/10);if(k>=24){el.textContent=fmt(tg);stopCount()}},30);
   }
   var f=obEl.querySelector('input');if(f)setTimeout(function(){try{f.focus({preventScroll:true})}catch(e){}},350);
 }
+function saveProfile(){
+  var first=!P||!(S.body&&S.body.length);
+  var oldFoco=P&&P.foco;
+  P={nome:ob.nome,trat:ob.trat||'n',altura:Math.round(num(ob.altura)),peso:num(ob.peso),foco:ob.foco||(P&&P.foco)||'',criado:(P&&P.criado)||new Date().toISOString()};
+  lsSet(PKEY,P);
+  if(first&&P.peso){S.body.push({date:new Date().toISOString(),label:shortDate(),peso:P.peso})}
+  if(P.foco&&P.foco!==oldFoco){S.draft={}}
+  if(P.foco)setFocus(P.foco);
+  saveNow();
+}
 function obNext(){
   ob.err='';
   if(ob.step===2){var n=document.getElementById('ob-nome').value.trim();ob.nome=n;if(n.length<2){ob.err='Digite seu nome para continuar.';renderOb();return}}
-  else if(ob.step===3){
+  else if(ob.step===3){if(!ob.trat){ob.err='Escolha uma opção para continuar.';renderOb();return}}
+  else if(ob.step===4){
     var a=num(document.getElementById('ob-alt').value),p=num(document.getElementById('ob-peso').value);
     ob.altura=document.getElementById('ob-alt').value;ob.peso=document.getElementById('ob-peso').value;
     if(a!=null&&a<3)a=a*100;
     if(a==null||a<120||a>230){ob.err='Digite a altura em centímetros, entre 120 e 230. Exemplo: 175.';renderOb();return}
     if(p==null||p<30||p>250){ob.err='Digite o peso em quilos, entre 30 e 250. Exemplo: 78.';renderOb();return}
-    var first=!P||!(S.body&&S.body.length);
-    P={nome:ob.nome,altura:Math.round(a),peso:p,criado:(P&&P.criado)||new Date().toISOString()};lsSet(PKEY,P);
-    if(first){S.body.push({date:new Date().toISOString(),label:shortDate(),peso:p});saveNow()}
-    if(ob.edit){closeOb();view='perfil';render();return}
+    ob.altura=String(Math.round(a));ob.peso=String(p);
+    if(ob.mode==='dados'){saveProfile();closeOb();view='perfil';render();return}
   }
-  ob.step=Math.min(4,ob.step+1);renderOb();
+  else if(ob.step===5){if(!ob.foco){ob.err='Escolha um foco para continuar.';renderOb();return}saveProfile()}
+  ob.step=Math.min(6,ob.step+1);renderOb();
 }
 obEl.addEventListener('click',function(e){
   var b=e.target.closest('[data-ob]');if(!b)return;var a=b.dataset.ob;
   if(a==='next')obNext();
   else if(a==='back'){
-    if(ob.edit&&ob.step===2){closeOb();return}
+    if(ob.mode&&ob.step===(ob.mode==='foco'?5:2)){closeOb();return}
     if(ob.step===2)ob.nome=document.getElementById('ob-nome').value;
-    if(ob.step===3){ob.altura=document.getElementById('ob-alt').value;ob.peso=document.getElementById('ob-peso').value}
+    if(ob.step===4){ob.altura=document.getElementById('ob-alt').value;ob.peso=document.getElementById('ob-peso').value}
     ob.err='';ob.step=Math.max(0,ob.step-1);renderOb();
   }
-  else if(a==='done'){closeOb();view='treino';cur=nextWorkout();render();window.scrollTo(0,0)}
+  else if(a==='trat'||a==='foco'){ob[a]=b.dataset.v;ob.err='';var er=obEl.querySelector('.err');if(er)er.textContent='';obEl.querySelectorAll('[data-ob="'+a+'"]').forEach(function(o){o.setAttribute('aria-pressed',String(o.dataset.v===ob[a]))})}
+  else if(a==='done'){var m=ob.mode;closeOb();view=m?'perfil':'treino';cur=nextWorkout();render();window.scrollTo(0,0)}
 });
 obEl.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();obNext()}});
 
@@ -651,8 +738,10 @@ obEl.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName
   if(!S.draft)S.draft={};if(!S.walks)S.walks=[];if(!S.body)S.body=[];
   if(S.v!==VERSION){S.draft={};S.v=VERSION;lsSet(KEY,S)}
   P=lsGet(PKEY);
+  if(P&&P.foco)setFocus(P.foco);
   cur=nextWorkout();render();
-  if(!P)openOb(0,false);
+  if(!P)openOb(0,'');
+  else if(!P.foco)openOb(5,'novo-foco');
   try{if(navigator.wakeLock)navigator.wakeLock.request('screen').catch(function(){})}catch(e){}
 })();
 </script>
